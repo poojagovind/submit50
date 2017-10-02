@@ -116,6 +116,10 @@ def main():
     parser.add_argument("-v", "--verbose",
                         action="store_true",
                         help=_("show commands being executed"))
+    parser.add_argument("-V", "--version",
+                        action="version",
+                        help=_("show version number"),
+                        version=get_distribution("submit50").version)
     parser.add_argument("slug", help=_("prescribed identifier of work to submit"))
     args = vars(parser.parse_args())
 
@@ -140,8 +144,7 @@ def authenticate(org):
         os.mkdir(cache, 0o700)
     except BaseException:
         pass
-    authenticate.SOCKET = os.path.join(cache, "submit50")
-
+    authenticate.SOCKET = os.path.join(cache, org)
     spawn = pexpect.spawn if sys.version_info < (3, 0) else pexpect.spawnu
     child = spawn(
         "git -c credential.helper='cache --socket {}' credential fill".format(authenticate.SOCKET))
@@ -297,7 +300,8 @@ def excepthook(type, value, tb):
         cprint(_("Submission cancelled."), "red")
 
 
-sys.excepthook = excepthook
+# TODO
+#sys.excepthook = excepthook
 
 
 def handler(number, frame):
