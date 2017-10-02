@@ -113,6 +113,9 @@ def main():
 
     # define command-line arguments
     parser = argparse.ArgumentParser()
+    parser.add_argument("-l", "--logout",
+                        action="store_true",
+                        help=_("log out if logged in"))
     parser.add_argument("-v", "--verbose",
                         action="store_true",
                         help=_("show commands being executed"))
